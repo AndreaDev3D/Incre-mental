@@ -1,12 +1,12 @@
 html {
-    font-family :'Lucida Console'
+    font-family: 'Lucida Console'
 }
 
 body {
     margin: 4% 10% 0% 10%;
 }
 
-.bar-background {
+/* .bar-background {
     border-style: dashed;
     border-color: #560057;
     border-width: 4px;
@@ -28,4 +28,28 @@ body {
 
 .progress-counter {
     margin-left: 10px;
+} */
+
+.icon-wrapper {
+    position: relative;
+    display: inline-block;
+    /* Adjust as necessary */
+}
+
+.icon-wrapper i {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.icon-wrapper i:first-child {
+    /* This is the base icon */
+    position: relative;
+}
+
+.icon-wrapper i:last-child {
+    /* This is the overlapping icon */
+    position: absolute;
+    top: 0;
+    left: 0;
 }

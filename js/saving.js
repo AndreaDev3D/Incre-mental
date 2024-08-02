@@ -1,25 +1,27 @@
 function saveGame() {
-    const gameState = {
+  const gameState = {
     bugs: bugs,
     bugChance: bugChance,
     additionalFeatures: additionalFeatures,
     devs: devs,
+    devCost: devCost,
+    testers: testers,
+    managers: managers,
     cash: cash,
     devUpdateTime: devUpdateTime,
     intervalId: intervalId,
     projectIntervalId: projectIntervalId,
     bugIntervalId: bugIntervalId,
     gameSpeed: gameSpeed,
-    testers: testers,
-    managers: managers,
     baseProjectCash: baseProjectCash,
     additionalFeatureMultiplier: additionalFeatureMultiplier,
     bugPenalty: bugPenalty,
     newProductWidth: newProductWidth,
-    paused: paused
-    };
+    paused: paused,
+    projects: projects,
+  };
 
-    saveData(gameState);
+  saveData(gameState);
 }
 
 function saveData(data) {
@@ -32,6 +34,7 @@ function loadData() {
   bugs = gameData.bugs || 0;
   devs = gameData.devs || 0;
   cash = gameData.cash || 2000;
+  devCost = gameData.devCost || 100;
   testers = gameData.testers || 0;
   managers = gameData.managers || 0;
   newProductWidth = gameData.newProductWidth || 0;
@@ -46,29 +49,16 @@ function loadData() {
   additionalFeatureMultiplier = gameData.additionalFeatureMultiplier;
   bugPenalty = gameData.bugPenalty;
   paused = gameData.paused || false;
+  projects = gameData.projects;
 
 
   updateDevCounter();
   updateTesterCounter();
   updateManagerCounter();
   updateCashCounter();
-  updateBugCounter();
-  updateAdditionalFeatureCounter();
-
-  if(devs > 0) {
-    autoFeatureProgress();
-  }
-
-  if(testers > 0) {
-    autoBugDecrease();
-  }
-
-  var barName = "Product Progress";
-  var bar = document.getElementById(barName + "Bar");
-  var progressCounter = document.getElementById(barName + "Counter");
-  bar.style.width = newProductWidth + "%";
-  progressCounter.textContent = newProductWidth + "%";
-
+  renderProjects();
+  // updateBugCounter();
+  // updateAdditionalFeatureCounter();
 }
 
 function saveData(data) {
@@ -86,3 +76,8 @@ function resetGame() {
   localStorage.removeItem('gameData');
   location.reload();
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  loadGame();
+  setInterval(saveGame, 1000);
+});

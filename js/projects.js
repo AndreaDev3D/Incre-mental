@@ -1,32 +1,4 @@
 class Project {
-
-    // constructor(id) {
-    //     this.id = id;
-
-    //     this.bugs = 0;
-    //     this.bugChance = 10;
-    //     this.bugPenalty = 10;
-
-    //     this.additionalFeatures = 0;
-    //     this.additionalFeatureMultiplier = 10;
-
-    //     this.devs = 10;
-    //     this.tester = 1;
-    //     this.manager = 1;
-
-    //     this.intervalId = 0;
-    //     this.projectIntervalId = 0;
-    //     this.bugIntervalId = 0;
-
-    //     this.featureProgress = 0;
-    //     this.productProgress = 0;
-
-    //     this.paused = false;
-
-    //     this.autoFeatureProgress();
-    //     this.autoBugDecrease();
-    // }
-
     constructor(data) {
         this.id = data.id || generateRandomKey();
         this.bugs = data.bugs || 0;
@@ -52,8 +24,7 @@ class Project {
     increaseFeatureProgress(amount) {
         if (Math.floor(Math.random() * 100) < this.bugChance) {
             this.bugs++;
-        }
-        else {
+        } else {
             this.featureProgress += amount;
             if (this.featureProgress >= 100) {
                 this.increaseProductProgress(1);
@@ -74,7 +45,7 @@ class Project {
 
         if (this.managers > 0 && this.bugs <= 0) {
             if (this.additionalFeatures > (this.managers * 10)) {
-                releaseProduct();
+                this.releaseProduct();
             }
         }
 
@@ -83,50 +54,44 @@ class Project {
     }
 
     autoFeatureProgress() {
-
-        clearInterval(intervalId);
+        clearInterval(this.intervalId);
         if (this.devs % 100 !== 0) {
             this.intervalDuration = 1000 / (this.devs % 100);
             this.intervalId = setInterval(() => this.increaseFeatureProgress(1), this.intervalDuration);
         }
 
         if (this.devs >= 100) {
-            completions = Math.floor(devs / 100);
-            clearInterval(this.projectIntervalId)
-            this.projectIntervalId = setInterval(() => this.increaseProductProgress(1), this.gameSpeed / completions);
+            const completions = Math.floor(this.devs / 100);
+            clearInterval(this.projectIntervalId);
+            this.projectIntervalId = setInterval(() => this.increaseProductProgress(1), gameSpeed / completions);
         }
-    };
+    }
 
     decreaseBugCount() {
         this.bugs = Math.max(0, this.bugs - 1);
-
         this.updateCounters();
     }
 
     autoBugDecrease() {
         clearInterval(this.bugIntervalId);
         if (this.testers > 0) {
-            this.bugIntervalId = setInterval(() => decreaseBugCount(), this.gameSpeed / this.testers);
+            this.bugIntervalId = setInterval(() => this.decreaseBugCount(), gameSpeed / this.testers);
         }
     }
 
     pauseDevelopment() {
-        // Your implementation here
-        console.log(`Pause development for ${this.id}`);
-        if (this.paused == false) {
+        if (this.paused) {
+            this.autoFeatureProgress();
+        } else {
             clearInterval(this.intervalId);
             clearInterval(this.projectIntervalId);
-            this.paused = true;
         }
-        else if (this.paused == true) {
-            this.autoFeatureProgress();
-            this.paused = false;
-        }
+        this.paused = !this.paused;
     }
 
     releaseProduct() {
         if (this.productProgress >= 100) {
-            cash = cash + baseProjectCash + additionalFeatures * additionalFeatureMultiplier - bugs * bugPenalty;
+            cash = cash + baseProjectCash + this.additionalFeatures * this.additionalFeatureMultiplier - this.bugs * this.bugPenalty;
             updateCashCounter();
             this.updateCounters();
 
